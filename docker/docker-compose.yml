@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  mongo:
+    image: "mongo:latest"
+  spring:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - "8080:8080"
+    links:
+      - "mongo:database"
