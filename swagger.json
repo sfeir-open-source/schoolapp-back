@@ -1,0 +1,276 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SchoolApp",
+    "description": "SchoolApp is an web application to provide a support to SFEIR Schools.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/SOMNYP/school-app/1.0.0",
+      "description": "SchoolApp API Auto Mocking"
+    }
+  ],
+  "paths": {
+    "/schools": {
+      "get": {
+        "tags": [
+          "schools"
+        ],
+        "summary": "GET schools",
+        "description": "Retrieve all schools",
+        "operationId": "getAll",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/School"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/schools/add": {
+      "post": {
+        "tags": [
+          "schools"
+        ],
+        "summary": "POST schools/add",
+        "description": "Create a school",
+        "operationId": "add",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/School"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/School"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/schools/get/{id}": {
+      "get": {
+        "tags": [
+          "schools"
+        ],
+        "summary": "GET schools/get/{id}",
+        "description": "Retrieve one school",
+        "operationId": "get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/School"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No School is attached to this id"
+          }
+        }
+      }
+    },
+    "/schools/update/{id}": {
+      "put": {
+        "tags": [
+          "schools"
+        ],
+        "summary": "PUT schools/update/{id}",
+        "description": "Update a school",
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/School"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "School updated"
+          },
+          "404": {
+            "description": "No School is attached to this id"
+          }
+        }
+      }
+    },
+    "/schools/delete/{id}": {
+      "delete": {
+        "tags": [
+          "schools"
+        ],
+        "summary": "DELETE schools/delete/{id}",
+        "description": "Delete a school",
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "School deleted"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "School": {
+        "required": [
+          "id",
+          "manufacturer",
+          "name",
+          "releaseDate"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 21
+          },
+          "title": {
+            "type": "string",
+            "example": "SFEIR School - React"
+          },
+          "image": {
+            "type": "string",
+            "example": "base64 or url"
+          },
+          "publicSummary": {
+            "type": "string",
+            "example": "test"
+          },
+          "duration": {
+            "type": "string",
+            "example": "1day"
+          },
+          "objectives": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Basic hooks usage"
+            }
+          },
+          "prerequisites": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "[\"javascript\",\"typescript\"]"
+            }
+          },
+          "document": {
+            "type": "string"
+          },
+          "githubLink": {
+            "type": "string",
+            "format": "url",
+            "example": "https://github.com/sfeir-open-source/sfeir-school-react"
+          },
+          "teachers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "professor": {
+            "$ref": "#/components/schemas/User"
+          },
+          "status": {
+            "type": "string",
+            "example": "Accepted"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 158
+          },
+          "firstname": {
+            "type": "string",
+            "example": "foo"
+          },
+          "lastname": {
+            "type": "string",
+            "example": "bar"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "foo@bar.com"
+          },
+          "role": {
+            "type": "string",
+            "example": "Professor"
+          }
+        }
+      }
+    }
+  }
+}
