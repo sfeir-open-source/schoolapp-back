@@ -13,7 +13,7 @@ services:
       context: ..
       dockerfile: ./docker/Dockerfile
     ports:
-      - "80:8080"
+      - "80:80"
     links:
       - "mongo:database"
     depends_on:
