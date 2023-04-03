@@ -1,6 +1,17 @@
+FROM maven:latest AS MAVEN_BUILD
+
+MAINTAINER Pierre SOMNY
+
+COPY pom.xml /build/
+COPY src /build/src/
+
+WORKDIR /build/
+RUN mvn package
+
 FROM openjdk:latest
-VOLUME /tmp
-EXPOSE 8080
-ARG JAR_FILE=../target/school-app-docker.jar
-ADD ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+
+WORKDIR /app
+
+COPY --from=MAVEN_BUILD /build/target/school-app-docker.jar /app/
+
+ENTRYPOINT ["java", "-jar", "school-app-docker.jar"]

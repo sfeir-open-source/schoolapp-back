@@ -1,12 +1,20 @@
-version: "3.9"
+version: "3"
 services:
   mongo:
     image: "mongo:latest"
+  mongo-seed:
+    build: ./mongo-seed
+    links:
+      - "mongo:database"
+    depends_on:
+      - mongo
   spring:
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
     ports:
-      - "8080:8080"
+      - "80:8080"
     links:
       - "mongo:database"
+    depends_on:
+      - mongo-seed

@@ -4,18 +4,15 @@ SchoolApp is a web application to provide a support for all SFEIR schools.
 
 ## Installation
 
-Use the bash script [exec.sh](./exec.sh) to start the backend of the project.
-
-```bash
-chmod +x exec.sh
-./exec.sh
-```
+The installation of this project is handled by a docker compose configuration. You simply need to execute the
+command `docker compose up -d` at project root.
 
 It will start a docker compose environment with a mongo database and a spring boot CRUD.
 
 ## Routes
 
-All the routes of the spring boot CRUD are available on this [swagger](https://app.swaggerhub.com/apis/SOMNYP/school-app)
+All the routes of the spring boot CRUD are available on
+this [swagger](https://app.swaggerhub.com/apis/SOMNYP/school-app)
 
 ## Contributing
 
