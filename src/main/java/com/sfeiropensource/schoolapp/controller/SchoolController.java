@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+// TODO: remove this
+@CrossOrigin("*")
 @RequestMapping("schools")
 public class SchoolController {
 
