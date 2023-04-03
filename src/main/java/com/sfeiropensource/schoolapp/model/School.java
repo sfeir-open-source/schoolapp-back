@@ -16,6 +16,7 @@ import java.util.List;
 public class School {    // Attributes
     @Id
     private ObjectId _id;
+    private int id;
     private String title;
     // Optional ?
     private String image;
