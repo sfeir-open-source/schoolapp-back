@@ -5,6 +5,8 @@ MAINTAINER Pierre SOMNY
 COPY pom.xml /build/
 COPY src /build/src/
 
+ENV MONGO_URL=mongodb://host.docker.internal:27017/school-app
+
 WORKDIR /build/
 RUN mvn package
 
