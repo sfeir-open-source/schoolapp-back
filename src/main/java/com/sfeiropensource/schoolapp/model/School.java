@@ -16,7 +16,6 @@ public class School {    // Attributes
     @Id
     private int id;
     private String title;
-    // Optional ?
     private String image;
     private String publicSummary;
     private String duration;
