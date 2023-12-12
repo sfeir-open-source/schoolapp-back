@@ -1,20 +1,19 @@
 package com.sfeiropensource.schoolapp.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.Instant;
 import java.util.List;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "schools")
-public class School {    // Attributes
-    @Id
-    private int id;
+public class SchoolDTO {
+    private int idun;
     private String title;
     private String image;
     private String publicSummary;
@@ -23,7 +22,13 @@ public class School {    // Attributes
     private List<String> prerequisites;
     private String document;
     private String githubLink;
-    private List<User> teachers;
-    private User professor;
+    private List<UserDTO> teachers;
+    private UserDTO professor;
     private String status;
+    private String createdBy;
+    private Instant createdAt;
+    private String updatedBy;
+    private Instant updatedAt;
+    private long version;
 }
+

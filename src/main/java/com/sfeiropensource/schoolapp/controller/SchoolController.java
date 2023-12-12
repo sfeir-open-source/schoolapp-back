@@ -1,23 +1,31 @@
 package com.sfeiropensource.schoolapp.controller;
 
-import com.sfeiropensource.schoolapp.model.School;
-import com.sfeiropensource.schoolapp.repository.SchoolRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.sfeiropensource.schoolapp.exception.AlreadyExistException;
+import com.sfeiropensource.schoolapp.exception.NotFoundException;
+import com.sfeiropensource.schoolapp.interceptor.ExceptionInterceptor;
+import com.sfeiropensource.schoolapp.model.SchoolDTO;
+import com.sfeiropensource.schoolapp.service.SchoolService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
+@Slf4j
 @RestController
-// TODO: remove this
-@CrossOrigin("*")
 @RequestMapping("schools")
-public class SchoolController {
+@SecurityRequirement(name = "bearer-key")
+@Tag(name = "School", description = "School controller")
+public class SchoolController implements ExceptionInterceptor {
 
-    @Autowired
-    private SchoolRepository schoolRepository;
+    private final SchoolService schoolService;
+
+    SchoolController(SchoolService schoolService) {
+        this.schoolService = schoolService;
+    }
 
     /**
      * Retrieve all schools from database
@@ -25,20 +33,19 @@ public class SchoolController {
      * @return List<School>
      */
     @GetMapping("/")
-    public ResponseEntity<List<School>> getAll() {
-        return ResponseEntity.ok(schoolRepository.findAll());
+    public ResponseEntity<List<SchoolDTO>> getAll() {
+        return schoolService.getAll();
     }
 
     /**
      * Add a school to the database
      *
-     * @param school School
-     * @return School - School is returned to provide new generated id
+     * @param schoolDTO UserDTO
+     * @return UserDTO - User is returned to provide new generated id
      */
     @PostMapping("/add")
-    public ResponseEntity<School> add(@RequestBody School school) {
-        School savedSchool = schoolRepository.save(school);
-        return ResponseEntity.ok(savedSchool);
+    public ResponseEntity<SchoolDTO> add(@RequestBody SchoolDTO schoolDTO) throws AlreadyExistException {
+        return schoolService.saveSchool(schoolDTO);
     }
 
     /**
@@ -48,30 +55,20 @@ public class SchoolController {
      * @return School | String
      */
     @GetMapping("/get/{id}")
-    public ResponseEntity<?> get(@PathVariable int id) {
-        Optional<School> school = schoolRepository.findById(id);
-        if (school.isPresent()) {
-            return ResponseEntity.ok(school);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No School is attached to this id");
+    public ResponseEntity<SchoolDTO> get(@PathVariable int id) throws NotFoundException {
+        return schoolService.get(id);
     }
 
     /**
      * Update a school
      *
-     * @param id            int - Unique identifier of a school
-     * @param updatedSchool School - updated
+     * @param id        int - Unique identifier of a school
+     * @param schoolDTO SchoolDTO - updated
      * @return String
      */
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity<String> update(@PathVariable("id") int id, @RequestBody School updatedSchool) {
-        Optional<School> school = schoolRepository.findById(id);
-        if (school.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No School is attached to this id");
-        }
-        // TODO: Search why example update each property at a time and doesn't just save the object.
-        schoolRepository.save(updatedSchool);
-        return ResponseEntity.ok("School updated");
+    public ResponseEntity<SchoolDTO> update(@PathVariable("id") int id, @RequestBody SchoolDTO schoolDTO) throws NotFoundException {
+        return schoolService.update(id, schoolDTO);
     }
 
     /**
@@ -81,8 +78,7 @@ public class SchoolController {
      * @return String
      */
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable int id) {
-        schoolRepository.deleteById(id);
-        return ResponseEntity.ok("School deleted");
+    public ResponseEntity<HttpStatus> delete(@PathVariable int id) {
+        return schoolService.delete(id);
     }
 }

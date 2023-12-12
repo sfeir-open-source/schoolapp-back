@@ -1,21 +1,29 @@
 package com.sfeiropensource.schoolapp.controller;
 
-import com.sfeiropensource.schoolapp.model.User;
-import com.sfeiropensource.schoolapp.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.sfeiropensource.schoolapp.exception.AlreadyExistException;
+import com.sfeiropensource.schoolapp.exception.NotFoundException;
+import com.sfeiropensource.schoolapp.interceptor.ExceptionInterceptor;
+import com.sfeiropensource.schoolapp.model.UserDTO;
+import com.sfeiropensource.schoolapp.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("users")
-public class UserController {
+@SecurityRequirement(name = "bearer-key")
+@Tag(name = "User", description = "User controller")
+public class UserController implements ExceptionInterceptor {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * Retrieve all users from database
@@ -23,64 +31,52 @@ public class UserController {
      * @return List<User>
      */
     @GetMapping("/")
-    public ResponseEntity<List<User>> getAll() {
-        return ResponseEntity.ok(userRepository.findAll());
+    public ResponseEntity<List<UserDTO>> getAll() {
+        return userService.getAll();
     }
 
     /**
      * Add a user to the database
      *
-     * @param user User
-     * @return User - User is returned to provide new generated id
+     * @param userDTO UserDTO
+     * @return UserDTO - User is returned to provide new generated idun
      */
     @PostMapping("/add")
-    public ResponseEntity<User> add(@RequestBody User user) {
-        User savedSchool = userRepository.save(user);
-        return ResponseEntity.ok(savedSchool);
+    public ResponseEntity<UserDTO> add(@RequestBody UserDTO userDTO) throws AlreadyExistException {
+        return userService.saveUser(userDTO);
     }
 
     /**
-     * Retrieve a specific user attached to an id
+     * Retrieve a specific user attached to an idun
      *
-     * @param id int - Unique identifier of a user
+     * @param idun int - Unique identifier of a user
      * @return User | String
      */
-    @GetMapping("/get/{id}")
-    public ResponseEntity<?> get(@PathVariable int id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No User is attached to this id");
+    @GetMapping("/get/{idun}")
+    public ResponseEntity<UserDTO> get(@PathVariable int idun) throws NotFoundException {
+        return userService.get(idun);
     }
 
     /**
      * Update a user
      *
-     * @param id            int - Unique identifier of a user
-     * @param updatedSchool User - updated
+     * @param idun    int - Unique identifier of a user
+     * @param userDTO UserDTO - updated
      * @return String
      */
-    @PutMapping(value = "/update/{id}")
-    public ResponseEntity<String> update(@PathVariable("id") int id, @RequestBody User updatedSchool) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No User is attached to this id");
-        }
-        // TODO: Search why example update each property at a time and doesn't just save the object.
-        userRepository.save(updatedSchool);
-        return ResponseEntity.ok("User updated");
+    @PutMapping(value = "/update/{idun}")
+    public ResponseEntity<UserDTO> update(@PathVariable("idun") int idun, @RequestBody UserDTO userDTO) throws NotFoundException {
+        return userService.update(idun, userDTO);
     }
 
     /**
      * Delete a user
      *
-     * @param id int - Unique identifier of a user
+     * @param idun int - Unique identifier of a user
      * @return String
      */
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable int id) {
-        userRepository.deleteById(id);
-        return ResponseEntity.ok("User deleted");
+    @DeleteMapping("/delete/{idun}")
+    public ResponseEntity<HttpStatus> delete(@PathVariable int idun) {
+        return userService.delete(idun);
     }
 }
