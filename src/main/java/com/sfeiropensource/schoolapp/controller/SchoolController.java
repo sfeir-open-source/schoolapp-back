@@ -16,6 +16,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@CrossOrigin("*")
 @RequestMapping("schools")
 @SecurityRequirement(name = "bearer-key")
 @Tag(name = "School", description = "School controller")
