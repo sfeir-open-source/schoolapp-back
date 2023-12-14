@@ -29,7 +29,7 @@ public class UserService {
      * @return UserDTO
      */
     public ResponseEntity<UserDTO> saveUser(UserDTO userDTO) throws AlreadyExistException {
-        Optional<User> existingUser = userRepository.findByIdun(userDTO.getIdun());
+        Optional<User> existingUser = userRepository.findByIdun(userDTO.getId());
         if (existingUser.isPresent()) {
             throw new AlreadyExistException("The user attached to this ID already exist");
         }

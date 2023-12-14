@@ -32,7 +32,7 @@ public class SchoolService {
      * @return SchoolDTO
      */
     public ResponseEntity<SchoolDTO> saveSchool(SchoolDTO schoolDTO) throws AlreadyExistException {
-        Optional<School> existingSchool = schoolRepository.findById(schoolDTO.getIdun());
+        Optional<School> existingSchool = schoolRepository.findByIdun(schoolDTO.getId());
         if (existingSchool.isPresent()) {
             throw new AlreadyExistException("The school attached to this ID already exist");
         }
@@ -49,7 +49,7 @@ public class SchoolService {
      * @return ResponseEntity<SchoolDTO>
      */
     public ResponseEntity<SchoolDTO> get(int id) throws NotFoundException {
-        Optional<School> school = schoolRepository.findById(id);
+        Optional<School> school = schoolRepository.findByIdun(id);
         if (school.isPresent()) {
             return ResponseEntity.ok(objectMapper.toSchoolDTO(school.get()));
         }

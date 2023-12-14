@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SchoolDTO {
-    private int idun;
+    private int id;
     private String title;
     private String image;
     private String publicSummary;
