@@ -73,7 +73,7 @@ public class SchoolService {
      * @return ResponseEntity<SchoolDTO>
      */
     public ResponseEntity<SchoolDTO> update(int id, SchoolDTO schoolDTO) throws NotFoundException {
-        if (!schoolRepository.existsById(id)) {
+        if (!schoolRepository.existsByIdun(id)) {
             throw new NotFoundException("No School is attached to this id");
         }
         return ResponseEntity.ok(objectMapper.toSchoolDTO(schoolRepository.save(objectMapper.toSchool(schoolDTO))));
@@ -87,7 +87,7 @@ public class SchoolService {
      */
     public ResponseEntity<HttpStatus> delete(int id) {
         try {
-            schoolRepository.deleteById(id);
+            schoolRepository.deleteByIdun(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
