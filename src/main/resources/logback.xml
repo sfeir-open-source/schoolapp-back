@@ -8,16 +8,16 @@
         </layout>
     </appender>
 
-    <logger name="com.sfeiropensource" level="info" additivity="false">
+    <root level="error">
         <appender-ref ref="CONSOLE"/>
-    </logger>
+    </root>
+
+    <root level="info">
+        <appender-ref ref="CONSOLE"/>
+    </root>
 
     <logger name="com.sfeiropensource" level="debug" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
-
-    <root level="error">
-        <appender-ref ref="CONSOLE"/>
-    </root>
 
 </configuration>

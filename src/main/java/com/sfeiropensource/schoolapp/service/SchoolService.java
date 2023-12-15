@@ -32,14 +32,18 @@ public class SchoolService {
      * @return SchoolDTO
      */
     public ResponseEntity<SchoolDTO> saveSchool(SchoolDTO schoolDTO) throws AlreadyExistException {
-        Optional<School> existingSchool = schoolRepository.findByIdun(schoolDTO.getId());
-        if (existingSchool.isPresent()) {
-            throw new AlreadyExistException("The school attached to this ID already exist");
+        if (schoolDTO.getId() != null) {
+            Optional<School> existingSchool = schoolRepository.findById(schoolDTO.getId());
+            if (existingSchool.isPresent()) {
+                throw new AlreadyExistException("The school attached to this ID already exist");
+            }
         }
+
+        School school = objectMapper.toSchool(schoolDTO);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(objectMapper.toSchoolDTO(schoolRepository.save(objectMapper.toSchool(schoolDTO))));
+                .body(objectMapper.toSchoolDTO(schoolRepository.save(school)));
     }
 
     /**
@@ -48,8 +52,8 @@ public class SchoolService {
      * @param id int
      * @return ResponseEntity<SchoolDTO>
      */
-    public ResponseEntity<SchoolDTO> get(int id) throws NotFoundException {
-        Optional<School> school = schoolRepository.findByIdun(id);
+    public ResponseEntity<SchoolDTO> get(String id) throws NotFoundException {
+        Optional<School> school = schoolRepository.findById(id);
         if (school.isPresent()) {
             return ResponseEntity.ok(objectMapper.toSchoolDTO(school.get()));
         }
@@ -62,7 +66,7 @@ public class SchoolService {
      * @return ResponseEntity<List < SchoolDTO>>
      */
     public ResponseEntity<List<SchoolDTO>> getAll() {
-        return ResponseEntity.ok(schoolRepository.findAll().stream().map(objectMapper::toSchoolDTO).toList());
+        return ResponseEntity.ok(schoolRepository.getAll().stream().map(objectMapper::toSchoolDTO).toList());
     }
 
     /**
@@ -72,8 +76,8 @@ public class SchoolService {
      * @param schoolDTO SchoolDTO
      * @return ResponseEntity<SchoolDTO>
      */
-    public ResponseEntity<SchoolDTO> update(int id, SchoolDTO schoolDTO) throws NotFoundException {
-        if (!schoolRepository.existsByIdun(id)) {
+    public ResponseEntity<SchoolDTO> update(String id, SchoolDTO schoolDTO) throws NotFoundException {
+        if (!schoolRepository.existsById(id)) {
             throw new NotFoundException("No School is attached to this id");
         }
         return ResponseEntity.ok(objectMapper.toSchoolDTO(schoolRepository.save(objectMapper.toSchool(schoolDTO))));
@@ -85,9 +89,9 @@ public class SchoolService {
      * @param id int
      * @return ResponseEntity<HttpStatus>
      */
-    public ResponseEntity<HttpStatus> delete(int id) {
+    public ResponseEntity<HttpStatus> delete(String id) {
         try {
-            schoolRepository.deleteByIdun(id);
+            schoolRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

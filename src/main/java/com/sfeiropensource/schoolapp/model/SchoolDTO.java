@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SchoolDTO {
-    private int id;
+    private String id;
     private String title;
     private String image;
     private String publicSummary;
@@ -29,6 +29,6 @@ public class SchoolDTO {
     private Instant createdAt;
     private String updatedBy;
     private Instant updatedAt;
-    private long version;
+    private int version;
 }
 

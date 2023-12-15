@@ -29,9 +29,11 @@ public class UserService {
      * @return UserDTO
      */
     public ResponseEntity<UserDTO> saveUser(UserDTO userDTO) throws AlreadyExistException {
-        Optional<User> existingUser = userRepository.findByIdun(userDTO.getId());
-        if (existingUser.isPresent()) {
-            throw new AlreadyExistException("The user attached to this ID already exist");
+        if (userDTO.getId() != null) {
+            Optional<User> existingUser = userRepository.findById(userDTO.getId());
+            if (existingUser.isPresent()) {
+                throw new AlreadyExistException("The user attached to this ID already exist");
+            }
         }
 
         return ResponseEntity
@@ -40,17 +42,17 @@ public class UserService {
     }
 
     /**
-     * Fetch a specific user attached to idun
+     * Fetch a specific user attached to id
      *
-     * @param idun int
+     * @param id int
      * @return ResponseEntity<UserDTO>
      */
-    public ResponseEntity<UserDTO> get(int idun) throws NotFoundException {
-        Optional<User> user = userRepository.findByIdun(idun);
+    public ResponseEntity<UserDTO> get(String id) throws NotFoundException {
+        Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
             return ResponseEntity.ok(objectMapper.toUserDTO(user.get()));
         }
-        throw new NotFoundException("No User is attached to this idun");
+        throw new NotFoundException("No User is attached to this id");
     }
 
     /**
@@ -65,13 +67,13 @@ public class UserService {
     /**
      * Update user inside the DB
      *
-     * @param idun    int
+     * @param id      int
      * @param userDTO UserDTO
      * @return ResponseEntity<UserDTO>
      */
-    public ResponseEntity<UserDTO> update(int idun, UserDTO userDTO) throws NotFoundException {
-        if (!userRepository.existsByIdun(idun)) {
-            throw new NotFoundException("No User is attached to this idun");
+    public ResponseEntity<UserDTO> update(String id, UserDTO userDTO) throws NotFoundException {
+        if (!userRepository.existsById(id)) {
+            throw new NotFoundException("No User is attached to this id");
         }
         return ResponseEntity.ok(objectMapper.toUserDTO(userRepository.save(objectMapper.toUser(userDTO))));
     }
@@ -79,12 +81,12 @@ public class UserService {
     /**
      * Delete user inside the DB
      *
-     * @param idun int
+     * @param id int
      * @return ResponseEntity<HttpStatus>
      */
-    public ResponseEntity<HttpStatus> delete(int idun) {
+    public ResponseEntity<HttpStatus> delete(String id) {
         try {
-            userRepository.deleteByIdun(idun);
+            userRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -1,12 +1,15 @@
 package com.sfeiropensource.schoolapp.entity;
 
+import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.*;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
 
 import java.time.Instant;
 import java.util.List;
@@ -18,8 +21,9 @@ import java.util.List;
 @Document(collection = "schools")
 public class School {
     @Id
-    private ObjectId _id;
-    private int idun;
+    @Null
+    @Field(targetType = FieldType.STRING)
+    private String id;
     private String title;
     // URL link to image
     private String image;
@@ -35,8 +39,11 @@ public class School {
     private String document;
     // GitHub link to repository with exercises
     private String githubLink;
-    // List of users (teachers)
+    // List of teachers
+    @DBRef
     private List<User> teachers;
+    // Professor of the school
+    @DBRef
     private User professor;
     // Actual status of the school (wip live deprecated)
     private String status;
@@ -49,5 +56,5 @@ public class School {
     @LastModifiedDate
     private Instant updatedAt;
     @Version
-    private long version;
+    private int version;
 }

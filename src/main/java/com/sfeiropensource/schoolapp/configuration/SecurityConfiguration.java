@@ -22,7 +22,7 @@ public class SecurityConfiguration {
                                 antMatcher("/v3/api-docs/**"),
                                 antMatcher("/swagger-ui/**")
                         ).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
         return http.build();

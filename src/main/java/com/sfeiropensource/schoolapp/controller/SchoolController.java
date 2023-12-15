@@ -56,7 +56,7 @@ public class SchoolController implements ExceptionInterceptor {
      * @return School | String
      */
     @GetMapping("/get/{id}")
-    public ResponseEntity<SchoolDTO> get(@PathVariable int id) throws NotFoundException {
+    public ResponseEntity<SchoolDTO> get(@PathVariable String id) throws NotFoundException {
         return schoolService.get(id);
     }
 
@@ -68,7 +68,7 @@ public class SchoolController implements ExceptionInterceptor {
      * @return String
      */
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity<SchoolDTO> update(@PathVariable("id") int id, @RequestBody SchoolDTO schoolDTO) throws NotFoundException {
+    public ResponseEntity<SchoolDTO> update(@PathVariable("id") String id, @RequestBody SchoolDTO schoolDTO) throws NotFoundException {
         return schoolService.update(id, schoolDTO);
     }
 
@@ -79,7 +79,7 @@ public class SchoolController implements ExceptionInterceptor {
      * @return String
      */
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable int id) {
+    public ResponseEntity<HttpStatus> delete(@PathVariable String id) {
         return schoolService.delete(id);
     }
 }

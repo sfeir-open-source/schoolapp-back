@@ -40,7 +40,7 @@ public class UserController implements ExceptionInterceptor {
      * Add a user to the database
      *
      * @param userDTO UserDTO
-     * @return UserDTO - User is returned to provide new generated idun
+     * @return UserDTO - User is returned to provide new generated id
      */
     @PostMapping("/add")
     public ResponseEntity<UserDTO> add(@RequestBody UserDTO userDTO) throws AlreadyExistException {
@@ -48,36 +48,36 @@ public class UserController implements ExceptionInterceptor {
     }
 
     /**
-     * Retrieve a specific user attached to an idun
+     * Retrieve a specific user attached to an id
      *
-     * @param idun int - Unique identifier of a user
+     * @param id int - Unique identifier of a user
      * @return User | String
      */
-    @GetMapping("/get/{idun}")
-    public ResponseEntity<UserDTO> get(@PathVariable int idun) throws NotFoundException {
-        return userService.get(idun);
+    @GetMapping("/get/{id}")
+    public ResponseEntity<UserDTO> get(@PathVariable String id) throws NotFoundException {
+        return userService.get(id);
     }
 
     /**
      * Update a user
      *
-     * @param idun    int - Unique identifier of a user
+     * @param id      int - Unique identifier of a user
      * @param userDTO UserDTO - updated
      * @return String
      */
-    @PutMapping(value = "/update/{idun}")
-    public ResponseEntity<UserDTO> update(@PathVariable("idun") int idun, @RequestBody UserDTO userDTO) throws NotFoundException {
-        return userService.update(idun, userDTO);
+    @PutMapping(value = "/update/{id}")
+    public ResponseEntity<UserDTO> update(@PathVariable("id") String id, @RequestBody UserDTO userDTO) throws NotFoundException {
+        return userService.update(id, userDTO);
     }
 
     /**
      * Delete a user
      *
-     * @param idun int - Unique identifier of a user
+     * @param id int - Unique identifier of a user
      * @return String
      */
-    @DeleteMapping("/delete/{idun}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable int idun) {
-        return userService.delete(idun);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<HttpStatus> delete(@PathVariable String id) {
+        return userService.delete(id);
     }
 }
