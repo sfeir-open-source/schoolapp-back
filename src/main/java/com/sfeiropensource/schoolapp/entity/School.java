@@ -1,6 +1,5 @@
 package com.sfeiropensource.schoolapp.entity;
 
-import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,10 +19,9 @@ import java.util.List;
 @AllArgsConstructor
 @Document(collection = "schools")
 public class School {
-    @Id
-    @Null
-    @Field(targetType = FieldType.STRING)
+    @Field(targetType = FieldType.OBJECT_ID)
     private String id;
+    // School title
     private String title;
     // URL link to image
     private String image;

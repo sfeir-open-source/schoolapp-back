@@ -1,6 +1,5 @@
 package com.sfeiropensource.schoolapp.entity;
 
-import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,9 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @Document(collection = "users")
 public class User {
-    @Id
-    @Null
-    @Field(targetType = FieldType.STRING)
+    @Field(targetType = FieldType.OBJECT_ID)
     private String id;
     private String firstname;
     private String lastname;

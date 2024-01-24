@@ -7,6 +7,7 @@ import com.sfeiropensource.schoolapp.mapper.ObjectMapper;
 import com.sfeiropensource.schoolapp.model.UserDTO;
 import com.sfeiropensource.schoolapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -72,10 +74,24 @@ public class UserService {
      * @return ResponseEntity<UserDTO>
      */
     public ResponseEntity<UserDTO> update(String id, UserDTO userDTO) throws NotFoundException {
-        if (!userRepository.existsById(id)) {
+        Optional<User> request = userRepository.findById(id);
+        if (request.isEmpty()) {
             throw new NotFoundException("No User is attached to this id");
         }
-        return ResponseEntity.ok(objectMapper.toUserDTO(userRepository.save(objectMapper.toUser(userDTO))));
+
+        User user = request.get();
+
+        // Update user from dto.
+        objectMapper.updateUserFromUserDto(userDTO, user);
+
+        try {
+            // Save.
+            user = userRepository.save(user);
+        } catch (Exception exception) {
+            log.error(exception.getLocalizedMessage());
+        }
+
+        return ResponseEntity.ok(objectMapper.toUserDTO(user));
     }
 
     /**

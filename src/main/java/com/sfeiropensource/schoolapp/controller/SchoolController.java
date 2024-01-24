@@ -1,8 +1,8 @@
 package com.sfeiropensource.schoolapp.controller;
 
-import com.sfeiropensource.schoolapp.exception.AlreadyExistException;
 import com.sfeiropensource.schoolapp.exception.NotFoundException;
 import com.sfeiropensource.schoolapp.interceptor.ExceptionInterceptor;
+import com.sfeiropensource.schoolapp.model.CreateSchoolDTO;
 import com.sfeiropensource.schoolapp.model.SchoolDTO;
 import com.sfeiropensource.schoolapp.service.SchoolService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -45,7 +45,7 @@ public class SchoolController implements ExceptionInterceptor {
      * @return UserDTO - User is returned to provide new generated id
      */
     @PostMapping("/add")
-    public ResponseEntity<SchoolDTO> add(@RequestBody SchoolDTO schoolDTO) throws AlreadyExistException {
+    public ResponseEntity<SchoolDTO> add(@RequestBody CreateSchoolDTO schoolDTO) {
         return schoolService.saveSchool(schoolDTO);
     }
 

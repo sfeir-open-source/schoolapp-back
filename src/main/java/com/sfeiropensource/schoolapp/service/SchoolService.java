@@ -1,11 +1,12 @@
 package com.sfeiropensource.schoolapp.service;
 
 import com.sfeiropensource.schoolapp.entity.School;
-import com.sfeiropensource.schoolapp.exception.AlreadyExistException;
 import com.sfeiropensource.schoolapp.exception.NotFoundException;
 import com.sfeiropensource.schoolapp.mapper.ObjectMapper;
+import com.sfeiropensource.schoolapp.model.CreateSchoolDTO;
 import com.sfeiropensource.schoolapp.model.SchoolDTO;
 import com.sfeiropensource.schoolapp.repository.SchoolRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class SchoolService {
 
@@ -28,18 +30,12 @@ public class SchoolService {
     /**
      * Save provided school into the database
      *
-     * @param schoolDTO SchoolDTO
+     * @param createSchoolDTO SchoolDTO
      * @return SchoolDTO
      */
-    public ResponseEntity<SchoolDTO> saveSchool(SchoolDTO schoolDTO) throws AlreadyExistException {
-        if (schoolDTO.getId() != null) {
-            Optional<School> existingSchool = schoolRepository.findById(schoolDTO.getId());
-            if (existingSchool.isPresent()) {
-                throw new AlreadyExistException("The school attached to this ID already exist");
-            }
-        }
+    public ResponseEntity<SchoolDTO> saveSchool(CreateSchoolDTO createSchoolDTO) {
 
-        School school = objectMapper.toSchool(schoolDTO);
+        School school = objectMapper.newSchool(createSchoolDTO);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -66,7 +62,7 @@ public class SchoolService {
      * @return ResponseEntity<List < SchoolDTO>>
      */
     public ResponseEntity<List<SchoolDTO>> getAll() {
-        return ResponseEntity.ok(schoolRepository.getAll().stream().map(objectMapper::toSchoolDTO).toList());
+        return ResponseEntity.ok(schoolRepository.findAll().stream().map(objectMapper::toSchoolDTO).toList());
     }
 
     /**
@@ -74,13 +70,27 @@ public class SchoolService {
      *
      * @param id        int
      * @param schoolDTO SchoolDTO
-     * @return ResponseEntity<SchoolDTO>
+     * @return ResponseEntity<SchoolDTO>D
      */
     public ResponseEntity<SchoolDTO> update(String id, SchoolDTO schoolDTO) throws NotFoundException {
-        if (!schoolRepository.existsById(id)) {
+        Optional<School> request = schoolRepository.findById(id);
+        if (request.isEmpty()) {
             throw new NotFoundException("No School is attached to this id");
         }
-        return ResponseEntity.ok(objectMapper.toSchoolDTO(schoolRepository.save(objectMapper.toSchool(schoolDTO))));
+
+        School school = request.get();
+
+        // Update school from dto.
+        objectMapper.updateSchoolFromSchoolDto(schoolDTO, school);
+
+        try {
+            // Save.
+            school = schoolRepository.save(school);
+        } catch (Exception exception) {
+            log.error(exception.getLocalizedMessage());
+        }
+
+        return ResponseEntity.ok(objectMapper.toSchoolDTO(school));
     }
 
     /**
