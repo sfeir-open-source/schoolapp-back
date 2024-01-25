@@ -28,6 +28,11 @@ public interface ObjectMapper {
     User toUser(UserDTO userDTO);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "version", ignore = true)
     void updateSchoolFromSchoolDto(SchoolDTO schoolDTO, @MappingTarget School school);
 
     @Mapping(target = "id", ignore = true)
