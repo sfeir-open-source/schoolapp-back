@@ -1,8 +1,8 @@
 package com.sfeiropensource.schoolapp.controller;
 
-import com.sfeiropensource.schoolapp.exception.AlreadyExistException;
 import com.sfeiropensource.schoolapp.exception.NotFoundException;
 import com.sfeiropensource.schoolapp.interceptor.ExceptionInterceptor;
+import com.sfeiropensource.schoolapp.model.CreateUserDTO;
 import com.sfeiropensource.schoolapp.model.UserDTO;
 import com.sfeiropensource.schoolapp.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -43,8 +43,8 @@ public class UserController implements ExceptionInterceptor {
      * @return UserDTO - User is returned to provide new generated id
      */
     @PostMapping("/add")
-    public ResponseEntity<UserDTO> add(@RequestBody UserDTO userDTO) throws AlreadyExistException {
-        return userService.saveUser(userDTO);
+    public ResponseEntity<UserDTO> add(@RequestBody CreateUserDTO userDTO) {
+        return userService.add(userDTO);
     }
 
     /**
@@ -62,11 +62,11 @@ public class UserController implements ExceptionInterceptor {
      * Update a user
      *
      * @param id      int - Unique identifier of a user
-     * @param userDTO UserDTO - updated
+     * @param userDTO CreateUserDTO - updated
      * @return String
      */
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity<UserDTO> update(@PathVariable("id") String id, @RequestBody UserDTO userDTO) throws NotFoundException {
+    public ResponseEntity<UserDTO> update(@PathVariable("id") String id, @RequestBody CreateUserDTO userDTO) throws NotFoundException {
         return userService.update(id, userDTO);
     }
 

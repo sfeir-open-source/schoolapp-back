@@ -20,6 +20,8 @@ public class CreateSchoolDTO {
     private List<String> prerequisites;
     private String document;
     private String githubLink;
+    private List<UserDTO> teachers;
+    private UserDTO professor;
     private String status;
 }
 

@@ -68,7 +68,7 @@ public class SchoolController implements ExceptionInterceptor {
      * @return String
      */
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity<SchoolDTO> update(@PathVariable("id") String id, @RequestBody SchoolDTO schoolDTO) throws NotFoundException {
+    public ResponseEntity<SchoolDTO> update(@PathVariable("id") String id, @RequestBody CreateSchoolDTO schoolDTO) throws NotFoundException {
         return schoolService.update(id, schoolDTO);
     }
 

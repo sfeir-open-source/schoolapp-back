@@ -69,10 +69,10 @@ public class SchoolService {
      * Update school inside the DB
      *
      * @param id        int
-     * @param schoolDTO SchoolDTO
+     * @param schoolDTO CreateSchoolDTO
      * @return ResponseEntity<SchoolDTO>D
      */
-    public ResponseEntity<SchoolDTO> update(String id, SchoolDTO schoolDTO) throws NotFoundException {
+    public ResponseEntity<SchoolDTO> update(String id, CreateSchoolDTO schoolDTO) throws NotFoundException {
         Optional<School> request = schoolRepository.findById(id);
         if (request.isEmpty()) {
             throw new NotFoundException("No School is attached to this id");

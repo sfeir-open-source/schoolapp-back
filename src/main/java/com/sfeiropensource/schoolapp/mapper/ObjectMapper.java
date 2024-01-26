@@ -3,6 +3,7 @@ package com.sfeiropensource.schoolapp.mapper;
 import com.sfeiropensource.schoolapp.entity.School;
 import com.sfeiropensource.schoolapp.entity.User;
 import com.sfeiropensource.schoolapp.model.CreateSchoolDTO;
+import com.sfeiropensource.schoolapp.model.CreateUserDTO;
 import com.sfeiropensource.schoolapp.model.SchoolDTO;
 import com.sfeiropensource.schoolapp.model.UserDTO;
 import org.mapstruct.*;
@@ -21,20 +22,21 @@ public interface ObjectMapper {
 
     School newSchool(CreateSchoolDTO createSchoolDTO);
 
-    School toSchool(SchoolDTO schoolDTO);
-
     UserDTO toUserDTO(User user);
 
-    User toUser(UserDTO userDTO);
+    User newUser(CreateUserDTO userDTO);
 
-    @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "version", ignore = true)
-    void updateSchoolFromSchoolDto(SchoolDTO schoolDTO, @MappingTarget School school);
+    void updateSchoolFromSchoolDto(CreateSchoolDTO schoolDTO, @MappingTarget School school);
 
-    @Mapping(target = "id", ignore = true)
-    void updateUserFromUserDto(UserDTO userDTO, @MappingTarget User user);
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "version", ignore = true)
+    void updateUserFromUserDto(CreateUserDTO userDTO, @MappingTarget User user);
 }

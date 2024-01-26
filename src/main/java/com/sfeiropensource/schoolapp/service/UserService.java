@@ -1,9 +1,9 @@
 package com.sfeiropensource.schoolapp.service;
 
 import com.sfeiropensource.schoolapp.entity.User;
-import com.sfeiropensource.schoolapp.exception.AlreadyExistException;
 import com.sfeiropensource.schoolapp.exception.NotFoundException;
 import com.sfeiropensource.schoolapp.mapper.ObjectMapper;
+import com.sfeiropensource.schoolapp.model.CreateUserDTO;
 import com.sfeiropensource.schoolapp.model.UserDTO;
 import com.sfeiropensource.schoolapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,17 +30,10 @@ public class UserService {
      * @param userDTO UserDTO
      * @return UserDTO
      */
-    public ResponseEntity<UserDTO> saveUser(UserDTO userDTO) throws AlreadyExistException {
-        if (userDTO.getId() != null) {
-            Optional<User> existingUser = userRepository.findById(userDTO.getId());
-            if (existingUser.isPresent()) {
-                throw new AlreadyExistException("The user attached to this ID already exist");
-            }
-        }
-
+    public ResponseEntity<UserDTO> add(CreateUserDTO userDTO) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(objectMapper.toUserDTO(userRepository.save(objectMapper.toUser(userDTO))));
+                .body(objectMapper.toUserDTO(userRepository.save(objectMapper.newUser(userDTO))));
     }
 
     /**
@@ -70,10 +63,10 @@ public class UserService {
      * Update user inside the DB
      *
      * @param id      int
-     * @param userDTO UserDTO
+     * @param userDTO CreateUserDTO
      * @return ResponseEntity<UserDTO>
      */
-    public ResponseEntity<UserDTO> update(String id, UserDTO userDTO) throws NotFoundException {
+    public ResponseEntity<UserDTO> update(String id, CreateUserDTO userDTO) throws NotFoundException {
         Optional<User> request = userRepository.findById(id);
         if (request.isEmpty()) {
             throw new NotFoundException("No User is attached to this id");

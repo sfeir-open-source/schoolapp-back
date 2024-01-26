@@ -5,8 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.*;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
@@ -38,10 +38,10 @@ public class School {
     // GitHub link to repository with exercises
     private String githubLink;
     // List of teachers
-    @DBRef
+    @DocumentReference
     private List<User> teachers;
     // Professor of the school
-    @DBRef
+    @DocumentReference
     private User professor;
     // Actual status of the school (wip live deprecated)
     private String status;

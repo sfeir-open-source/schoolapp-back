@@ -5,13 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.*;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
 import java.time.Instant;
-import java.util.List;
 
 @Data
 @Builder
@@ -26,8 +24,6 @@ public class User {
     private String email;
     // User moderator admin
     private String role;
-    @DBRef
-    private List<School> schools;
     @CreatedBy
     private String createdBy;
     @CreatedDate
