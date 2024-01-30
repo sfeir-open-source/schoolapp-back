@@ -5,8 +5,10 @@ import com.sfeiropensource.schoolapp.exception.NotFoundException;
 import com.sfeiropensource.schoolapp.mapper.ObjectMapper;
 import com.sfeiropensource.schoolapp.model.CreateSchoolDTO;
 import com.sfeiropensource.schoolapp.model.SchoolDTO;
+import com.sfeiropensource.schoolapp.model.SearchSchoolDTO;
 import com.sfeiropensource.schoolapp.repository.SchoolRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -66,6 +68,36 @@ public class SchoolService {
     }
 
     /**
+     * Search among schools with criteria
+     *
+     * @param pageNumber      {int}
+     * @param pageSize        {int}
+     * @param searchSchoolDTO {SearchSchoolDTO}
+     * @return ResponseEntity<Page < SchoolDTO>>
+     */
+    public ResponseEntity<Page<SchoolDTO>> search(int pageNumber, int pageSize, SearchSchoolDTO searchSchoolDTO) {
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        // Create a School example with OR logic between different fields
+        ExampleMatcher exampleMatcher = ExampleMatcher.matchingAny()
+                .withMatcher("title", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                .withMatcher("objectives", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                .withMatcher("prerequisites", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                .withMatcher("status", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                .withMatcher("professor.firstname", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                .withMatcher("professor.lastname", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                .withMatcher("teachers.firstname", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                .withMatcher("teachers.lastname", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
+
+        School schoolExample = objectMapper.constructExample(searchSchoolDTO);
+
+        Example<School> example = Example.of(schoolExample, exampleMatcher);
+
+        return ResponseEntity.ok(schoolRepository.findAll(example, pageable).map(objectMapper::toSchoolDTO));
+    }
+
+    /**
      * Update school inside the DB
      *
      * @param id        int
@@ -83,14 +115,9 @@ public class SchoolService {
         // Update school from dto.
         objectMapper.updateSchoolFromSchoolDto(schoolDTO, school);
 
-        try {
-            // Save.
-            school = schoolRepository.save(school);
-        } catch (Exception exception) {
-            log.error(exception.getLocalizedMessage());
-        }
+        schoolRepository.save(school);
 
-        return ResponseEntity.ok(objectMapper.toSchoolDTO(school));
+        return this.get(id);
     }
 
     /**
