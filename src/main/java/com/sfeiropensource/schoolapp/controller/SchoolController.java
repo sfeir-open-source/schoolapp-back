@@ -9,6 +9,7 @@ import com.sfeiropensource.schoolapp.service.SchoolService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,16 +21,13 @@ import java.util.List;
 @Slf4j
 @RestController
 @CrossOrigin("*")
+@RequiredArgsConstructor
 @RequestMapping("schools")
 @SecurityRequirement(name = "bearer-key")
 @Tag(name = "School", description = "School controller")
 public class SchoolController implements ExceptionInterceptor {
 
     private final SchoolService schoolService;
-
-    SchoolController(SchoolService schoolService) {
-        this.schoolService = schoolService;
-    }
 
     /**
      * Retrieve all schools from database

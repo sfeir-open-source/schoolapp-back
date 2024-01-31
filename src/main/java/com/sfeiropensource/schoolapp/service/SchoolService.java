@@ -100,11 +100,11 @@ public class SchoolService {
     /**
      * Update school inside the DB
      *
-     * @param id        int
-     * @param schoolDTO CreateSchoolDTO
+     * @param id              int
+     * @param createSchoolDTO CreateSchoolDTO
      * @return ResponseEntity<SchoolDTO>D
      */
-    public ResponseEntity<SchoolDTO> update(String id, CreateSchoolDTO schoolDTO) throws NotFoundException {
+    public ResponseEntity<SchoolDTO> update(String id, CreateSchoolDTO createSchoolDTO) throws NotFoundException {
         Optional<School> request = schoolRepository.findById(id);
         if (request.isEmpty()) {
             throw new NotFoundException("No School is attached to this id");
@@ -113,7 +113,7 @@ public class SchoolService {
         School school = request.get();
 
         // Update school from dto.
-        objectMapper.updateSchoolFromSchoolDto(schoolDTO, school);
+        objectMapper.updateSchoolFromSchoolDto(createSchoolDTO, school);
 
         schoolRepository.save(school);
 

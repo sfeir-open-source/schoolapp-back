@@ -10,10 +10,10 @@ import java.util.List;
 @Mapper(
         componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
+        nullValueCheckStrategy = NullValueCheckStrategy.ON_IMPLICIT_CONVERSION,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        nullValueIterableMappingStrategy = NullValueMappingStrategy.RETURN_NULL,
-        nullValueMapMappingStrategy = NullValueMappingStrategy.RETURN_NULL,
+        nullValueIterableMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT,
+        nullValueMapMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT,
         nullValueMappingStrategy = NullValueMappingStrategy.RETURN_NULL
 )
 public interface ObjectMapper {
