@@ -4,10 +4,13 @@ import com.sfeiropensource.schoolapp.exception.NotFoundException;
 import com.sfeiropensource.schoolapp.interceptor.ExceptionInterceptor;
 import com.sfeiropensource.schoolapp.model.CreateSchoolDTO;
 import com.sfeiropensource.schoolapp.model.SchoolDTO;
+import com.sfeiropensource.schoolapp.model.SearchSchoolDTO;
 import com.sfeiropensource.schoolapp.service.SchoolService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +39,13 @@ public class SchoolController implements ExceptionInterceptor {
     @GetMapping("/")
     public ResponseEntity<List<SchoolDTO>> getAll() {
         return schoolService.getAll();
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<Page<SchoolDTO>> search(@Valid @RequestBody SearchSchoolDTO searchSchoolDTO,
+                                                  @RequestParam(required = false, defaultValue = "0") int pageNumber,
+                                                  @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        return schoolService.search(pageNumber, pageSize, searchSchoolDTO);
     }
 
     /**

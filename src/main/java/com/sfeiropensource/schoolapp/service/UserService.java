@@ -4,10 +4,12 @@ import com.sfeiropensource.schoolapp.entity.User;
 import com.sfeiropensource.schoolapp.exception.NotFoundException;
 import com.sfeiropensource.schoolapp.mapper.ObjectMapper;
 import com.sfeiropensource.schoolapp.model.CreateUserDTO;
+import com.sfeiropensource.schoolapp.model.SearchUserDTO;
 import com.sfeiropensource.schoolapp.model.UserDTO;
 import com.sfeiropensource.schoolapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -77,14 +79,36 @@ public class UserService {
         // Update user from dto.
         objectMapper.updateUserFromUserDto(userDTO, user);
 
-        try {
-            // Save.
-            user = userRepository.save(user);
-        } catch (Exception exception) {
-            log.error(exception.getLocalizedMessage());
-        }
+        // Save.
+        userRepository.save(user);
 
-        return ResponseEntity.ok(objectMapper.toUserDTO(user));
+        return this.get(id);
+    }
+
+    /**
+     * Search among schools with criteria
+     *
+     * @param pageNumber    {int}
+     * @param pageSize      {int}
+     * @param searchUserDTO {SearchSchoolDTO}
+     * @return ResponseEntity<Page < SchoolDTO>>
+     */
+    public ResponseEntity<Page<UserDTO>> search(int pageNumber, int pageSize, SearchUserDTO searchUserDTO) {
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        // Create a School example with OR logic between different fields
+        ExampleMatcher exampleMatcher = ExampleMatcher.matchingAny()
+                .withMatcher("firstname", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                .withMatcher("lastname", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                .withMatcher("email", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                .withMatcher("role", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
+
+        User user = objectMapper.constructExample(searchUserDTO);
+        
+        Example<User> example = Example.of(user, exampleMatcher);
+
+        return ResponseEntity.ok(userRepository.findAll(example, pageable).map(objectMapper::toUserDTO));
     }
 
     /**

@@ -3,10 +3,13 @@ package com.sfeiropensource.schoolapp.controller;
 import com.sfeiropensource.schoolapp.exception.NotFoundException;
 import com.sfeiropensource.schoolapp.interceptor.ExceptionInterceptor;
 import com.sfeiropensource.schoolapp.model.CreateUserDTO;
+import com.sfeiropensource.schoolapp.model.SearchUserDTO;
 import com.sfeiropensource.schoolapp.model.UserDTO;
 import com.sfeiropensource.schoolapp.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +37,13 @@ public class UserController implements ExceptionInterceptor {
     @GetMapping("/")
     public ResponseEntity<List<UserDTO>> getAll() {
         return userService.getAll();
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<Page<UserDTO>> search(@Valid @RequestBody SearchUserDTO searchUserDTO,
+                                                @RequestParam(required = false, defaultValue = "0") int pageNumber,
+                                                @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        return userService.search(pageNumber, pageSize, searchUserDTO);
     }
 
     /**
