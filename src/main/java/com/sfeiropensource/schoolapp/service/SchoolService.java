@@ -87,8 +87,12 @@ public class SchoolService {
                 .withMatcher("status", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
                 .withMatcher("professor.firstname", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
                 .withMatcher("professor.lastname", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                .withMatcher("professor.role", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                .withMatcher("professor.email", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
                 .withMatcher("teachers.firstname", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-                .withMatcher("teachers.lastname", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
+                .withMatcher("teachers.lastname", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                .withMatcher("teachers.role", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                .withMatcher("teachers.email", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
 
         School schoolExample = objectMapper.constructExample(searchSchoolDTO);
 
