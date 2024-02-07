@@ -26,6 +26,8 @@ jobs:
         with:
           message: 'commit badge'
           add: '*.svg'
+          author_email: "somny.p@feir.com"
+          author_name: "pierresomny"
 
       - name: Upload JaCoCo coverage report
         uses: actions/upload-artifact@v2
