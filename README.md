@@ -1,5 +1,12 @@
 # SchoolApp backend
 
+<div align="center">
+<h1>School App</h1>
+
+</div>
+
+![Coverage](.github/badges/jacoco.svg)
+
 ## Project documentation
 
 SchoolApp is a web application to provide a support for all SFEIR schools.
