@@ -10,11 +10,8 @@ import java.util.List;
 @Mapper(
         componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        nullValueCheckStrategy = NullValueCheckStrategy.ON_IMPLICIT_CONVERSION,
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        nullValueIterableMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT,
         nullValueMapMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT,
-        nullValueMappingStrategy = NullValueMappingStrategy.RETURN_NULL
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface ObjectMapper {
     SchoolDTO toSchoolDTO(School school);

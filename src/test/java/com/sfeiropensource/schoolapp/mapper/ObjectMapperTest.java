@@ -6,7 +6,6 @@ import com.sfeiropensource.schoolapp.model.*;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.sfeiropensource.schoolapp.utils.Objects.*;
@@ -30,7 +29,14 @@ class ObjectMapperTest {
 
         // If no teachers are present, it must create a new empty array list.
         school.setTeachers(null);
-        expectedResult.setTeachers(new ArrayList<>());
+        expectedResult.setTeachers(null);
+
+        result = objectMapper.toSchoolDTO(school);
+
+        assertEquals(expectedResult, result);
+
+        school = School.builder().build();
+        expectedResult = SchoolDTO.builder().build();
 
         result = objectMapper.toSchoolDTO(school);
 
@@ -60,7 +66,14 @@ class ObjectMapperTest {
 
         // If no teachers are present, it must create a new empty array list.
         createSchoolDTO.setTeachers(null);
-        expectedResult.setTeachers(new ArrayList<>());
+        expectedResult.setTeachers(null);
+
+        result = objectMapper.newSchool(createSchoolDTO);
+
+        assertEquals(expectedResult, result);
+
+        createSchoolDTO = CreateSchoolDTO.builder().build();
+        expectedResult = School.builder().build();
 
         result = objectMapper.newSchool(createSchoolDTO);
 
@@ -120,6 +133,24 @@ class ObjectMapperTest {
         objectMapper.updateSchoolFromSchoolDto(createSchoolDTO, result);
 
         assertEquals(expectedResult, result);
+
+        objectMapper.updateSchoolFromSchoolDto(null, result);
+
+        assertEquals(expectedResult, result);
+
+        result = School.builder().build();
+        expectedResult = School.builder().build();
+
+        objectMapper.updateSchoolFromSchoolDto(CreateSchoolDTO.builder().build(), result);
+
+        assertEquals(expectedResult, result);
+
+        result = School.builder().build();
+        expectedResult = School.builder().teachers(List.of(User.builder().build())).build();
+
+        objectMapper.updateSchoolFromSchoolDto(CreateSchoolDTO.builder().teachers(List.of(UserDTO.builder().build())).build(), result);
+
+        assertEquals(expectedResult, result);
     }
 
     @Test
@@ -143,6 +174,17 @@ class ObjectMapperTest {
         result = generateUser();
 
         objectMapper.updateUserFromUserDto(createUserDTO, result);
+
+        assertEquals(expectedResult, result);
+
+        objectMapper.updateUserFromUserDto(null, result);
+
+        assertEquals(expectedResult, result);
+
+        result = User.builder().build();
+        expectedResult = User.builder().build();
+
+        objectMapper.updateUserFromUserDto(CreateUserDTO.builder().build(), result);
 
         assertEquals(expectedResult, result);
     }

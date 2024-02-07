@@ -13,7 +13,7 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @Configuration
 public class SecurityConfiguration {
 
-    @Value("${spring.security.enabled:#{true}")
+    @Value("${spring.security.enabled:#{true}}")
     private String securityEnabled;
 
     @Bean

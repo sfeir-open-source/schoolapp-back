@@ -34,7 +34,7 @@ public class SchoolController implements ExceptionInterceptor {
      *
      * @return List<School>
      */
-    @GetMapping("/")
+    @GetMapping({"/", ""})
     public ResponseEntity<List<SchoolDTO>> getAll() {
         return schoolService.getAll();
     }
