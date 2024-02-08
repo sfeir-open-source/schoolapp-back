@@ -2,7 +2,6 @@
 
 <div align="center">
 <h1>School App</h1>
-
 </div>
 
 ![Coverage](.github/badges/jacoco.svg)
