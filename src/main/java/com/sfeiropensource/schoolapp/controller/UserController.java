@@ -34,7 +34,7 @@ public class UserController implements ExceptionInterceptor {
      *
      * @return List<User>
      */
-    @GetMapping("/")
+    @GetMapping({"/", ""})
     public ResponseEntity<List<UserDTO>> getAll() {
         return userService.getAll();
     }

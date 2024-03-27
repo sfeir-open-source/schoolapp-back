@@ -31,7 +31,7 @@ public class SecurityConfiguration {
                                     antMatcher("/swagger-ui/**")
                             ).permitAll()
                             // And other requests authenticated.
-                            .anyRequest().authenticated()
+                            .anyRequest().permitAll()
                     )
                     .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
 

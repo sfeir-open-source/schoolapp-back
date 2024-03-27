@@ -5,6 +5,7 @@ import com.sfeiropensource.schoolapp.interceptor.ExceptionInterceptor;
 import com.sfeiropensource.schoolapp.model.CreateSchoolDTO;
 import com.sfeiropensource.schoolapp.model.SchoolDTO;
 import com.sfeiropensource.schoolapp.model.SearchSchoolDTO;
+import com.sfeiropensource.schoolapp.service.GcpBucketService;
 import com.sfeiropensource.schoolapp.service.SchoolService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,8 +14,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -28,6 +31,7 @@ import java.util.List;
 public class SchoolController implements ExceptionInterceptor {
 
     private final SchoolService schoolService;
+    private final GcpBucketService gcpBucketService;
 
     /**
      * Retrieve all schools from database
@@ -89,5 +93,18 @@ public class SchoolController implements ExceptionInterceptor {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable String id) {
         return schoolService.delete(id);
+    }
+
+    /**
+     * Update image attach to a school
+     *
+     * @param file - MultipartFile
+     * @return String
+     */
+    @PostMapping(value = "/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<String> addFile(@RequestParam("file") MultipartFile file) {
+        log.info("Call addFile API");
+        gcpBucketService.uploadFiles(file);
+        return ResponseEntity.ok("yeah my boi");
     }
 }

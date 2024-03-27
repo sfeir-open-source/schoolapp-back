@@ -102,7 +102,7 @@ public class SchoolService {
      *
      * @param id              int
      * @param createSchoolDTO CreateSchoolDTO
-     * @return ResponseEntity<SchoolDTO>D
+     * @return ResponseEntity<SchoolDTO>
      */
     public ResponseEntity<SchoolDTO> update(String id, CreateSchoolDTO createSchoolDTO) throws NotFoundException {
         Optional<School> request = schoolRepository.findById(id);
